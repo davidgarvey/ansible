@@ -1,11 +1,11 @@
 ---
-- hosts: hosts
+- hosts: hostname
   user: root
   tasks:
     - name: write ssh banner
       template: src=/path/to/template/banner.j2 dest=/etc/ssh/banner
     - name: add a single line to sshd_config 
-      lineinfile: dest=/etc/ssh/sshd_config regexp='^#Banner' insertafter='^#Bner none' line='Banner /etc/ssh/banner'
+      lineinfile: dest=/etc/ssh/sshd_config regexp='^#Banner' insertafter='^#Banner none' line='Banner /etc/ssh/banner'
            state=present
       notify:
       - restart sshd
