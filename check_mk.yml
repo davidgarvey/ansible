@@ -13,7 +13,8 @@
     - name: copy check_mk logwatch
       copy: src=/home/ansible/copy_files/check_mk-agent-logwatch-1.2.2p2-1.noarch.rpm dest=/tmp
     - name: Install Check_Mk
-      command: /bin/rpm -ivh /tmp/check_mk-agent*
+      yum: pkg='/tmp/check_mk-agent-1.2.2p2-1.noarch.rpm' state=installed
+      yum: pkg='/tmp/check_mk-agent-logwatch-1.2.2p2-1.noarch.rpm' state=installed
       notify:
       - restart xinetd
     - name: ensure xinetd is running
