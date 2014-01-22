@@ -1,24 +1,27 @@
 ---
-- hosts: all
+- hosts: $host
   user: root
   tasks:
     - name: install xinetd
       yum: pkg=$item state=latest
       with_items:
         - xinetd
+        - libselinux-python
     - name: config xinetd
-      template: src=/home/ansible/copy_files/xinetd.j2 dest=/etc/xinetd.d/check_mk
-    - name: copy check_mk agent
+      template: src=/home/ansible/copy_files/xinetd.j2 dest=/etc/xinetd.d/check_mk 
+    - name: copy rpms
       copy: src=/home/ansible/copy_files/check_mk-agent-1.2.2p2-1.noarch.rpm dest=/tmp
-    - name: copy check_mk logwatch
+    - name: cp the last one
       copy: src=/home/ansible/copy_files/check_mk-agent-logwatch-1.2.2p2-1.noarch.rpm dest=/tmp
     - name: Install Check_Mk
       yum: pkg='/tmp/check_mk-agent-1.2.2p2-1.noarch.rpm' state=installed
+    - name: Install logwatch
       yum: pkg='/tmp/check_mk-agent-logwatch-1.2.2p2-1.noarch.rpm' state=installed
       notify:
       - restart xinetd
     - name: ensure xinetd is running
       service: name=xinetd state=started
   handlers:
-    - name: restart xinetd
+    - name: restart xinetd 
       service: name=xinetd state=restarted
+
